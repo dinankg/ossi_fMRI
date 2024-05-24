@@ -27,7 +27,6 @@ seq_params.oversamp=100;%Fully sample these many spiral samples.
 sys=mr.opts('maxGrad',seq_params.maxgrad,'gradUnit', ...
     'mT/m','maxSlew',seq_params.maxslew, 'slewUnit', 'T/m/s');
 sys.adcDeadTime=1e-5;
-% sys.rfDeadTime = 1e-4;
 %% RF pulse segment
 seq = mr.Sequence(sys);
 
@@ -45,15 +44,13 @@ gzcomb = mr.addGradients({gzPreph,gz_rf,gzReph},'system',sys);
 % Parameters for spiral readouts in toppe compatible units
 ge_sys = [];
 maxgrad_gcm = grad_convertion(seq_params.maxgrad);
-maxslew_gcms = slew_convertion(seq_params.maxslew,'s');
 ge_sys.fov = seq_params.fov.*100;
 ge_sys.N = seq_params.N;
 ge_sys.raster = sys.gradRasterTime;
-ge_sys.maxSlew = slew_convertion(seq_params.maxslew,'ms');  % assumes G/cm/ms
 ge_sys.maxGrad = maxgrad_gcm;  % assumes G/cm
 
 % create spiral readout with multiple shot
-[gx1,gy1,t,spiral_readout_length] = makevdspiral2(seq_params.fov(1)*100,seq_params.N(1), ...
+[gx1,gy1,t,spiral_readout_length] = makevdspiral(seq_params.fov(1)*100,seq_params.N(1), ...
     seq_params.nshot_spiral,seq_params.oversamp,ge_sys.maxGrad, ...
     0.9*seq_params.maxslew ,sys.gradRasterTime);
 %making it divisible by 10
@@ -68,10 +65,6 @@ gy = cell(1,seq_params.nshot_spiral);
 for i = 1:seq_params.nshot_spiral
     gx{i} = mr.makeArbitraryGrad('x',gx1_Hzcm(:,i),sys,'delay',.1e-3);
     gy{i}  = mr.makeArbitraryGrad('y',gy1_Hzcm(:,i),sys,'delay',.1e-3);
-    sum(isnan(gx1_Hzcm(:,i)))
-    sum(isnan(gy1_Hzcm(:,i)))
-
-
 end
 
 %% kz-encoding segment

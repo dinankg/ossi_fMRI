@@ -1,4 +1,4 @@
-function [g,k,t,s,npts] = genspiralvd(D, N, nl, gamp, gslew, dsamp) 
+function [g,k,t,s,npts] = genspivd(D, N, nl, gamp, gslew, dsamp,gts) 
 % /*
 %  *
 %  *    Subroutine for generating slew-rate-limited spirals.  
@@ -40,7 +40,7 @@ nramp=0;
 % nramp=100;
 MAX_PG_WAMP=32766;
 
-gts = 4e-06;
+% gts = 4e-06;
 
 Tmax = GRESMAX*gts;
 

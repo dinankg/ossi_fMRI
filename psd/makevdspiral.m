@@ -8,7 +8,7 @@ gmax: max grad (G/cm)
 smax: max slew (mT/m/ms) 150 should be good enough
 %}
 
-[gvd,kvd,t,slvd,npts] = genspivd3(FOV, npix, shots, gmax, smax, dsamp,ts);
+[gvd,kvd,t,slvd,npts] = genspivd(FOV, npix, shots, gmax, smax, dsamp,ts);
 gx=real(gvd);
 gy=imag(gvd);
 
