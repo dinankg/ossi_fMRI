@@ -1,4 +1,4 @@
-% MATLAB code for Bloch Simulation in Balanced Steady-State Free Precession Imaging (bSSFP)
+% MATLAB code for Bloch Simulation in oscillating Steady-State Imaging (OSSI)
 clc; clear; close all;
 
 % Choose field strength (in Tesla)
