@@ -13,7 +13,7 @@ gamT = 4.2576e7;   % Hz/Tesla
 gamG = gamT/1e4;    % Hz/Gauss
 
 %% Basic Scan Parameters
-ACTUAL_SCAN = 1;
+ACTUAL_SCAN = 0;
 seq_params.scanner = 'inside';
 seq_params.trig = 0;
 seq_params.nc = 10;
@@ -31,9 +31,14 @@ sys.adcDeadTime=1e-5;
 seq = mr.Sequence(sys);
 
 % RF pulse
-[rf, gz_rf,gzReph] = mr.makeSincPulse(seq_params.alpha*pi/180, 'Duration', 3e-3, ...
-    'SliceThickness', seq_params.slicethickness, 'apodization', 0.42, ...
-    'timeBwProduct', 4, 'system', sys);
+% [rf, gz_rf,gzReph] = mr.makeSincPulse(seq_params.alpha*pi/180, 'Duration', 3e-3, ...
+%     'SliceThickness', seq_params.slicethickness, 'apodization', 0.42, ...
+%     'timeBwProduct', 4, 'system', sys);
+flipangle = seq_params.alpha*pi/180;
+[rf, gz_rf, gzReph] = makeSLRpulse(flipangle, 'system', sys, 'duration', 3e-3, ...
+    'delay', sys.rfDeadTime,'timeBwProduct', 6,'filterType', 'ls',....
+    'sliceThickness', seq_params.slicethickness);
+
 gzPreph = gzReph;
 rf.delay = rf.deadTime;
 gz_rf.delay = ceil((mr.calcDuration(gzReph))/sys.gradRasterTime)*sys.gradRasterTime;
